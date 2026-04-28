@@ -87,10 +87,6 @@ export function buildYearGrid(habits: HabitWithLogs[]): WeekColumn[] {
   const jan1 = new Date(`${year}-01-01T12:00:00`)
   const jan1Dow = jan1.getDay() === 0 ? 7 : jan1.getDay() // 1–7
 
-  // Počet dní od 1.1. do konce roku (nebo dnešku)
-  const end = new Date(endDate + 'T12:00:00')
-  const start = new Date(startDate + 'T12:00:00')
-
   // Celkový počet dní v roce pro grid (celý rok)
   const totalDaysInYear = isLeapYear(year) ? 366 : 365
 
@@ -101,7 +97,7 @@ export function buildYearGrid(habits: HabitWithLogs[]): WeekColumn[] {
   // Sestavíme grid: columns[col][row], row 0 = Pondělí
   const columns: WeekColumn[] = Array.from({ length: totalColumns }, () => Array(7).fill(null))
 
-  let cursor = new Date(startDate + 'T12:00:00')
+  const cursor = new Date(startDate + 'T12:00:00')
   for (let day = 0; day < totalDaysInYear; day++) {
     const isoDate = toISODate(cursor)
     const colIndex = Math.floor((day + jan1Dow - 1) / 7)
