@@ -34,24 +34,24 @@ export default async function SharePage({ params }: Props) {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm text-gray-400 mb-1">Sdílený zvyk</p>
-        <h2 className="text-2xl font-semibold text-gray-900">{h.title}</h2>
-        <p className="text-sm text-gray-500 mt-1">{formatFrequency(h.frequency, h.target_day)}</p>
+        <p className="text-sm text-gray-500 mb-1">Sdílený zvyk</p>
+        <h2 className="text-2xl font-semibold text-white">{h.title}</h2>
+        <p className="text-sm text-gray-400 mt-1">{formatFrequency(h.frequency, h.target_day)}</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <div className="flex gap-6 mb-6">
+      <div className="bg-gray-900 rounded-xl border border-gray-800 p-5">
+        <div className="flex gap-8 mb-6">
           <div>
-            <p className="text-3xl font-bold text-green-600">{rate}%</p>
-            <p className="text-xs text-gray-400 mt-0.5">úspěšnost (30 dní)</p>
+            <p className="text-3xl font-bold text-green-400">{rate}%</p>
+            <p className="text-xs text-gray-500 mt-0.5">úspěšnost (30 dní)</p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-gray-700">{doneDays}</p>
-            <p className="text-xs text-gray-400 mt-0.5">splněno</p>
+            <p className="text-3xl font-bold text-white">{doneDays}</p>
+            <p className="text-xs text-gray-500 mt-0.5">splněno</p>
           </div>
           <div>
-            <p className="text-3xl font-bold text-gray-700">{expectedDays}</p>
-            <p className="text-xs text-gray-400 mt-0.5">očekáváno</p>
+            <p className="text-3xl font-bold text-white">{expectedDays}</p>
+            <p className="text-xs text-gray-500 mt-0.5">očekáváno</p>
           </div>
         </div>
 
@@ -61,30 +61,30 @@ export default async function SharePage({ params }: Props) {
             const expected = isExpectedDay(day, h.frequency, h.target_day)
             const isToday = day === today
 
-            let bg = 'bg-gray-100'
+            let bg = 'bg-gray-800'
             if (status === 'done') bg = 'bg-green-500'
-            else if (status === 'missed') bg = 'bg-red-400'
-            else if (expected && day < today) bg = 'bg-gray-200'
+            else if (status === 'missed') bg = 'bg-red-500'
+            else if (expected && day < today) bg = 'bg-gray-700'
 
             return (
               <div
                 key={day}
                 title={day}
-                className={`w-6 h-6 rounded-sm ${bg} ${isToday ? 'ring-2 ring-blue-400 ring-offset-1' : ''}`}
+                className={`w-6 h-6 rounded-sm ${bg} ${isToday ? 'ring-2 ring-blue-400 ring-offset-1 ring-offset-gray-900' : ''}`}
               />
             )
           })}
         </div>
-        <p className="text-xs text-gray-400 mt-2">Posledních 30 dní</p>
+        <p className="text-xs text-gray-600 mt-2">Posledních 30 dní</p>
 
-        <div className="flex gap-4 mt-4 text-xs text-gray-400">
-          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-green-500 inline-block" /> Splněno</span>
-          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-red-400 inline-block" /> Nesplněno</span>
-          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-gray-200 inline-block" /> Očekáváno</span>
+        <div className="flex gap-4 mt-4 text-xs text-gray-500">
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-green-500 inline-block" /> Splněno</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-red-500 inline-block" /> Nesplněno</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-gray-700 inline-block" /> Očekáváno</span>
         </div>
       </div>
 
-      <p className="text-xs text-center text-gray-300">Read-only view · Habit Tracker</p>
+      <p className="text-xs text-center text-gray-700">Read-only view · Habit Tracker</p>
     </div>
   )
 }
