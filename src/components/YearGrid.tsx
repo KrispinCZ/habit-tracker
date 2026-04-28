@@ -5,7 +5,6 @@ interface Props {
   habits: HabitWithLogs[]
 }
 
-// Vrátí Tailwind třídu barvy buňky podle stavu dne
 function cellColor(total: number, done: number, isFuture: boolean): string {
   if (isFuture || total === 0) return 'bg-gray-800'
   if (done === total) return 'bg-green-600'
@@ -13,7 +12,6 @@ function cellColor(total: number, done: number, isFuture: boolean): string {
   return 'bg-red-900'
 }
 
-// Krátké názvy dnů v týdnu (Po–Ne), jen lichá zobrazíme pro úsporu místa
 const DOW_LABELS = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne']
 
 export default function YearGrid({ habits }: Props) {
@@ -29,7 +27,6 @@ export default function YearGrid({ habits }: Props) {
   const columns = buildYearGrid(habits)
   const monthLabels = getMonthLabels(year)
 
-  // Sestavíme mapu colIndex → název měsíce pro rychlé vyhledání
   const monthByCol = new Map(monthLabels.map(({ label, colIndex }) => [colIndex, label]))
 
   return (
@@ -38,55 +35,50 @@ export default function YearGrid({ habits }: Props) {
         Roční přehled {year}
       </h2>
 
-      {/* Scrollovatelný wrapper pro mobil */}
-      <div className="overflow-x-auto">
-        <div className="inline-flex flex-col gap-1 min-w-max">
+      <div className="inline-flex flex-col gap-1">
 
-          {/* Popisky měsíců */}
-          <div className="flex gap-1 pl-7">
-            {columns.map((_, colIdx) => (
-              <div key={colIdx} className="w-3 text-center">
-                {monthByCol.has(colIdx) && (
-                  <span className="text-[10px] text-gray-500 whitespace-nowrap">
-                    {monthByCol.get(colIdx)}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Řádky dnů (Po–Ne) */}
-          {DOW_LABELS.map((dowLabel, rowIdx) => (
-            <div key={rowIdx} className="flex items-center gap-1">
-              {/* Popisek dne — zobrazíme jen Po, St, Pá */}
-              <span className="w-6 text-right text-[10px] text-gray-600 shrink-0">
-                {rowIdx % 2 === 0 ? dowLabel : ''}
-              </span>
-
-              {columns.map((week, colIdx) => {
-                const cell = week[rowIdx]
-                if (!cell) {
-                  // Prázdná buňka (začátek/konec roku mimo týden)
-                  return <div key={colIdx} className="w-3 h-3" />
-                }
-                const color = cellColor(cell.total, cell.done, cell.isFuture)
-                const tooltip = cell.isFuture
-                  ? cell.date
-                  : cell.total === 0
-                    ? `${cell.date} — žádný zvyk`
-                    : `${cell.date} — ${cell.done}/${cell.total} splněno`
-
-                return (
-                  <div
-                    key={colIdx}
-                    title={tooltip}
-                    className={`w-3 h-3 rounded-sm ${color} cursor-default`}
-                  />
-                )
-              })}
+        {/* Popisky měsíců */}
+        <div className="flex gap-1 pl-6">
+          {columns.map((_, colIdx) => (
+            <div key={colIdx} className="w-2 text-center">
+              {monthByCol.has(colIdx) && (
+                <span className="text-[9px] text-gray-500 whitespace-nowrap">
+                  {monthByCol.get(colIdx)}
+                </span>
+              )}
             </div>
           ))}
         </div>
+
+        {/* Řádky dnů (Po–Ne) */}
+        {DOW_LABELS.map((dowLabel, rowIdx) => (
+          <div key={rowIdx} className="flex items-center gap-1">
+            <span className="w-5 text-right text-[9px] text-gray-600 shrink-0">
+              {rowIdx % 2 === 0 ? dowLabel : ''}
+            </span>
+
+            {columns.map((week, colIdx) => {
+              const cell = week[rowIdx]
+              if (!cell) {
+                return <div key={colIdx} className="w-2 h-2" />
+              }
+              const color = cellColor(cell.total, cell.done, cell.isFuture)
+              const tooltip = cell.isFuture
+                ? cell.date
+                : cell.total === 0
+                  ? `${cell.date} — žádný zvyk`
+                  : `${cell.date} — ${cell.done}/${cell.total} splněno`
+
+              return (
+                <div
+                  key={colIdx}
+                  title={tooltip}
+                  className={`w-2 h-2 rounded-sm ${color} cursor-default`}
+                />
+              )
+            })}
+          </div>
+        ))}
       </div>
 
       {/* Legenda */}
