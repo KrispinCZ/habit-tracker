@@ -1,4 +1,4 @@
-import { createServerClient } from '@/lib/supabase'
+import { createServerClient } from '@/lib/supabase-server'
 import { HabitWithLogs } from '@/lib/types'
 import { formatFrequency, getLast30Days, isExpectedDay, toISODate } from '@/lib/utils'
 import { notFound } from 'next/navigation'

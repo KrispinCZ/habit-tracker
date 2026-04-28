@@ -1,4 +1,4 @@
-import { createServerClient } from '@/lib/supabase'
+import { createServerClient } from '@/lib/supabase-server'
 import { HabitWithLogs } from '@/lib/types'
 import HabitList from '@/components/HabitList'
 import AddHabitForm from '@/components/AddHabitForm'
