@@ -15,6 +15,7 @@ export default function HabitCard({ habit }: Props) {
   const [expanded, setExpanded] = useState(false)
   const [copied, setCopied] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [loggingDate, setLoggingDate] = useState<string | null>(null)
 
   const days = getLast30Days()
   const logMap = new Map(habit.habit_logs.map(l => [l.log_date, l.status]))
@@ -22,6 +23,8 @@ export default function HabitCard({ habit }: Props) {
   const todayStatus = logMap.get(today)
 
   async function logDay(date: string, status: HabitStatus) {
+    if (loggingDate !== null) return
+    setLoggingDate(date)
     const supabase = createClient()
     const existing = logMap.get(date)
 
@@ -32,6 +35,7 @@ export default function HabitCard({ habit }: Props) {
     } else {
       await supabase.from('habit_logs').insert({ habit_id: habit.id, log_date: date, status })
     }
+    setLoggingDate(null)
     router.refresh()
   }
 
@@ -50,6 +54,8 @@ export default function HabitCard({ habit }: Props) {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const isLogging = loggingDate !== null
+
   return (
     <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
       {/* Header — vždy viditelný, kliknutím rozbalí/sbalí */}
@@ -58,7 +64,6 @@ export default function HabitCard({ habit }: Props) {
         className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-800/50 transition-colors"
       >
         <div className="flex items-center gap-3 min-w-0">
-          {/* Indikátor dnešního stavu */}
           <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
             todayStatus === 'done' ? 'bg-green-500' :
             todayStatus === 'missed' ? 'bg-red-500' :
@@ -81,23 +86,25 @@ export default function HabitCard({ habit }: Props) {
           <div className="flex gap-2 pt-4">
             <button
               onClick={() => logDay(today, 'done')}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
+              disabled={isLogging}
+              className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                 todayStatus === 'done'
                   ? 'bg-green-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:bg-green-900/40 hover:text-green-400'
               }`}
             >
-              ✓ Splněno
+              {isLogging && loggingDate === today ? '…' : '✓ Splněno'}
             </button>
             <button
               onClick={() => logDay(today, 'missed')}
-              className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
+              disabled={isLogging}
+              className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                 todayStatus === 'missed'
                   ? 'bg-red-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:bg-red-900/40 hover:text-red-400'
               }`}
             >
-              ✗ Nesplněno
+              {isLogging && loggingDate === today ? '…' : '✗ Nesplněno'}
             </button>
           </div>
 
@@ -135,7 +142,7 @@ export default function HabitCard({ habit }: Props) {
             <button
               onClick={deleteHabit}
               disabled={deleting}
-              className="text-xs text-gray-500 hover:text-red-400 transition-colors"
+              className="text-xs text-gray-500 hover:text-red-400 transition-colors disabled:opacity-50"
             >
               Smazat
             </button>

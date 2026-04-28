@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createServerClient } from '@/lib/supabase'
 import { HabitWithLogs } from '@/lib/types'
 import { formatFrequency, getLast30Days, isExpectedDay, toISODate } from '@/lib/utils'
 import { notFound } from 'next/navigation'
@@ -11,7 +11,7 @@ interface Props {
 
 export default async function SharePage({ params }: Props) {
   const { token } = await params
-  const supabase = createClient()
+  const supabase = await createServerClient()
 
   const { data: habit } = await supabase
     .from('habits')

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase'
+import { createServerClient } from '@/lib/supabase'
 import { HabitWithLogs } from '@/lib/types'
 import HabitList from '@/components/HabitList'
 import AddHabitForm from '@/components/AddHabitForm'
@@ -6,7 +6,7 @@ import AddHabitForm from '@/components/AddHabitForm'
 export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const supabase = createClient()
+  const supabase = await createServerClient()
 
   const { data: habits } = await supabase
     .from('habits')
