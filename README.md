@@ -1,8 +1,19 @@
-# PRD Vibe Kit
+# Habit Tracker
 
-Předpřipravený kit s AI agenty pro **Product Vibe Coding** workshop.
+Webová appka pro sledování denních, týdenních a měsíčních zvyků. Každý zvyk lze sdílet přes unikátní read-only URL — bez nutnosti registrace pro diváka.
 
-Žádný kód, žádná appka — jen agenti a pravidla. Všechno si vygeneruješ sám z vlastního PRD.
+## Stack
+Next.js + Supabase + Tailwind + Vercel
+
+## Lokální vývoj
+```bash
+npm install
+npm run dev
+```
+
+---
+
+<!-- workshop kit info below -->
 
 ## Quick Start
 
